@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { demoUser } from '../data/demo';
+import { supabase, isSupabaseConfigured } from '../services/supabase';
 
 const AuthContext = createContext(null);
 
@@ -14,49 +15,186 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [isDemo, setIsDemo] = useState(true);
 
+  // Check Supabase session on mount
   useEffect(() => {
-    // Phase 1: Auto-login with demo user
-    const timer = setTimeout(() => {
-      setUser(demoUser);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
+    let mounted = true;
+
+    async function checkSession() {
+      if (isSupabaseConfigured()) {
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          if (session?.user && mounted) {
+            setUser({
+              id: session.user.id,
+              email: session.user.email,
+              full_name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+              currency: 'INR',
+              role: session.user.email.includes('admin') ? 'admin' : 'user',
+            });
+            setIsDemo(false);
+            setLoading(false);
+            return;
+          }
+        } catch (err) {
+          console.warn('Supabase auth session check failed, using demo fallback:', err);
+        }
+      }
+
+      // Default demo user fallback
+      if (mounted) {
+        setUser(demoUser);
+        setIsDemo(true);
+        setLoading(false);
+      }
+    }
+
+    checkSession();
+
+    // Subscribe to auth state changes
+    let authListener = null;
+    if (isSupabaseConfigured()) {
+      const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+        if (session?.user) {
+          setUser({
+            id: session.user.id,
+            email: session.user.email,
+            full_name: session.user.user_metadata?.full_name || session.user.email.split('@')[0],
+            currency: 'INR',
+            role: session.user.email.includes('admin') ? 'admin' : 'user',
+          });
+          setIsDemo(false);
+        }
+      });
+      authListener = data;
+    }
+
+    return () => {
+      mounted = false;
+      authListener?.subscription?.unsubscribe();
+    };
   }, []);
 
   const login = useCallback(async (email, password) => {
     setLoading(true);
-    // Simulate login
-    await new Promise((r) => setTimeout(r, 600));
-    const isAdmin = email.toLowerCase().includes('admin');
-    setUser({
-      ...demoUser,
-      email,
-      full_name: isAdmin ? 'System Administrator' : (demoUser.full_name || 'Arjun Mehta'),
-      role: isAdmin ? 'admin' : 'user',
-    });
+
+    // If demo credentials, allow instant login
+    if (email === 'demo@livepulse.app' || email === 'admin@livepulse.app') {
+      await new Promise((r) => setTimeout(r, 400));
+      const isAdmin = email.includes('admin');
+      setUser({
+        ...demoUser,
+        email,
+        full_name: isAdmin ? 'System Administrator' : 'Arjun Mehta',
+        role: isAdmin ? 'admin' : 'user',
+      });
+      setIsDemo(true);
+      setLoading(false);
+      return { success: true };
+    }
+
+    // Try Supabase Auth
+    if (isSupabaseConfigured()) {
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+
+        if (error) throw error;
+
+        if (data?.user) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: data.user.user_metadata?.full_name || data.user.email.split('@')[0],
+            currency: 'INR',
+            role: data.user.email.includes('admin') ? 'admin' : 'user',
+          });
+          setIsDemo(false);
+          setLoading(false);
+          return { success: true };
+        }
+      } catch (err) {
+        setLoading(false);
+        throw err;
+      }
+    }
+
+    // Generic fallback login
+    await new Promise((r) => setTimeout(r, 500));
+    setUser({ ...demoUser, email, full_name: email.split('@')[0] });
+    setIsDemo(true);
     setLoading(false);
     return { success: true };
   }, []);
 
   const register = useCallback(async (email, password, fullName) => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 800));
+
+    if (isSupabaseConfigured()) {
+      try {
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+            },
+          },
+        });
+
+        if (error) throw error;
+
+        if (data?.user) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email,
+            full_name: fullName,
+            currency: 'INR',
+            role: 'user',
+          });
+          setIsDemo(false);
+          setLoading(false);
+          return { success: true };
+        }
+      } catch (err) {
+        setLoading(false);
+        throw err;
+      }
+    }
+
+    // Fallback simulation
+    await new Promise((r) => setTimeout(r, 600));
     setUser({ ...demoUser, email, full_name: fullName });
+    setIsDemo(true);
     setLoading(false);
     return { success: true };
   }, []);
 
   const logout = useCallback(async () => {
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 300));
+    if (isSupabaseConfigured()) {
+      try {
+        await supabase.auth.signOut();
+      } catch (err) {
+        console.warn('Signout warning:', err);
+      }
+    }
     setUser(null);
     setLoading(false);
   }, []);
 
   const updateProfile = useCallback(async (updates) => {
+    if (isSupabaseConfigured() && user?.id && !isDemo) {
+      try {
+        await supabase.from('profiles').update(updates).eq('id', user.id);
+      } catch (err) {
+        console.warn('Profile update error:', err);
+      }
+    }
     setUser((prev) => ({ ...prev, ...updates }));
     return { success: true };
-  }, []);
+  }, [user, isDemo]);
 
   return (
     <AuthContext.Provider value={{ user, loading, isDemo, login, register, logout, updateProfile }}>
