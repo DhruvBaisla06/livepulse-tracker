@@ -155,7 +155,7 @@ export function AuthProvider({ children }) {
           });
           setIsDemo(false);
           setLoading(false);
-          return { success: true };
+          return { success: true, needsConfirmation: !data.session };
         }
       } catch (err) {
         setLoading(false);

@@ -1,9 +1,25 @@
-import { useState, useCallback, useMemo } from 'react';
-import { demoBudgets } from '../data/demo';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { demoBudgets, adminBudgets } from '../data/demo';
 import { calcBudgetUsage } from '../utils/calculations';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useBudgets(transactions) {
-  const [budgets, setBudgets] = useState(demoBudgets);
+  const { user } = useAuth();
+
+  const getInitialBudgets = () => {
+    if (user?.email === 'admin@livepulse.app') return adminBudgets;
+    return demoBudgets;
+  };
+
+  const [budgets, setBudgets] = useState(getInitialBudgets);
+
+  useEffect(() => {
+    if (user?.email === 'admin@livepulse.app') {
+      setBudgets(adminBudgets);
+    } else {
+      setBudgets(demoBudgets);
+    }
+  }, [user?.email]);
 
   const budgetUsage = useMemo(
     () => budgets.map((b) => calcBudgetUsage(b, transactions)),

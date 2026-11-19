@@ -1,9 +1,25 @@
-import { useState, useCallback, useMemo } from 'react';
-import { demoSavingsGoals } from '../data/demo';
+import { useState, useCallback, useMemo, useEffect } from 'react';
+import { demoSavingsGoals, adminSavingsGoals } from '../data/demo';
 import { calcGoalProgress } from '../utils/calculations';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useSavings() {
-  const [goals, setGoals] = useState(demoSavingsGoals);
+  const { user } = useAuth();
+
+  const getInitialGoals = () => {
+    if (user?.email === 'admin@livepulse.app') return adminSavingsGoals;
+    return demoSavingsGoals;
+  };
+
+  const [goals, setGoals] = useState(getInitialGoals);
+
+  useEffect(() => {
+    if (user?.email === 'admin@livepulse.app') {
+      setGoals(adminSavingsGoals);
+    } else {
+      setGoals(demoSavingsGoals);
+    }
+  }, [user?.email]);
 
   const goalsWithProgress = useMemo(() => goals.map(calcGoalProgress), [goals]);
 

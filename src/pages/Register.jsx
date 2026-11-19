@@ -30,9 +30,12 @@ export default function Register() {
 
   const strength = getPasswordStrength();
 
+  const [infoMessage, setInfoMessage] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setInfoMessage('');
 
     if (!fullName) {
       setError('Full name is required');
@@ -53,8 +56,12 @@ export default function Register() {
 
     try {
       setLoading(true);
-      await register(email, password, fullName);
-      navigate('/');
+      const res = await register(email, password, fullName);
+      if (res?.needsConfirmation) {
+        setInfoMessage('Account created! Please check your email to confirm, or login now.');
+      } else {
+        navigate('/');
+      }
     } catch (err) {
       setError(err.message || 'Failed to create account');
     } finally {
@@ -88,6 +95,12 @@ export default function Register() {
             {error && (
               <div className="p-3 rounded-xl bg-red-500/15 border border-red-500/30 text-red-300 text-xs">
                 {error}
+              </div>
+            )}
+
+            {infoMessage && (
+              <div className="p-3 rounded-xl bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs">
+                {infoMessage}
               </div>
             )}
 

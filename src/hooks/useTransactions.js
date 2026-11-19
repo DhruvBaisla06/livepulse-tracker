@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { demoTransactions } from '../data/demo';
+import { demoTransactions, adminTransactions } from '../data/demo';
 import { supabase, isSupabaseConfigured } from '../services/supabase';
 import { useAuth } from '../contexts/AuthContext';
 import {
@@ -9,15 +9,42 @@ import {
 
 export function useTransactions() {
   const { user, isDemo } = useAuth();
-  const [transactions, setTransactions] = useState(demoTransactions);
+
+  // Initial state based on account role
+  const getInitialTransactions = () => {
+    if (user?.email === 'admin@livepulse.app') return adminTransactions;
+    if (user?.email === 'demo@livepulse.app') return demoTransactions;
+    if (isDemo) return demoTransactions;
+    return []; // Real Supabase user starts with their real data
+  };
+
+  const [transactions, setTransactions] = useState(getInitialTransactions);
   const [loading, setLoading] = useState(false);
 
-  // Fetch transactions from Supabase on mount
+  // Sync / Fetch based on active user
   useEffect(() => {
     let active = true;
 
+    // 1. If Admin Demo
+    if (user?.email === 'admin@livepulse.app') {
+      setTransactions(adminTransactions);
+      setLoading(false);
+      return;
+    }
+
+    // 2. If Standard Demo
+    if (user?.email === 'demo@livepulse.app' || (isDemo && !user?.id)) {
+      setTransactions(demoTransactions);
+      setLoading(false);
+      return;
+    }
+
+    // 3. Real Supabase Registered User
     async function loadSupabaseTransactions() {
-      if (!isSupabaseConfigured() || isDemo || !user?.id) return;
+      if (!isSupabaseConfigured() || !user?.id) {
+        if (active) setTransactions([]);
+        return;
+      }
 
       try {
         setLoading(true);
@@ -29,14 +56,17 @@ export function useTransactions() {
 
         if (error) {
           console.warn('Error fetching Supabase transactions:', error);
+          if (active) setTransactions([]);
           return;
         }
 
-        if (data && data.length > 0 && active) {
-          setTransactions(data);
+        if (active) {
+          // Exactly the user's data (empty array if brand new account)
+          setTransactions(data || []);
         }
       } catch (err) {
         console.warn('Failed to load transactions:', err);
+        if (active) setTransactions([]);
       } finally {
         if (active) setLoading(false);
       }
@@ -44,7 +74,7 @@ export function useTransactions() {
 
     loadSupabaseTransactions();
 
-    // Setup Supabase Realtime Subscription
+    // Setup Supabase Realtime Subscription for real user
     let channel = null;
     if (isSupabaseConfigured() && !isDemo && user?.id) {
       channel = supabase
@@ -79,7 +109,7 @@ export function useTransactions() {
       active = false;
       if (channel) supabase.removeChannel(channel);
     };
-  }, [user?.id, isDemo]);
+  }, [user?.email, user?.id, isDemo]);
 
   const addTransaction = useCallback(
     async (txn) => {

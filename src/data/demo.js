@@ -10,6 +10,17 @@ export const demoUser = {
   created_at: '2024-01-15T10:00:00Z',
 };
 
+// ── Admin User ──
+export const adminUser = {
+  id: 'admin-user-001',
+  email: 'admin@livepulse.app',
+  full_name: 'System Administrator',
+  avatar_url: null,
+  currency: 'INR',
+  created_at: '2023-01-01T00:00:00Z',
+  role: 'admin',
+};
+
 // ── Categories ──
 export const demoCategories = [
   { id: 'cat-1', name: 'Salary', type: 'income', icon: 'Briefcase', color: '#8b5cf6' },
@@ -37,7 +48,7 @@ const dm = (monthsAgo, day) => {
   return format(new Date(m.getFullYear(), m.getMonth(), day), 'yyyy-MM-dd');
 };
 
-// ── Transactions (6 months of realistic data) ──
+// ── Demo User Transactions (Personal portfolio - Arjun Mehta) ──
 export const demoTransactions = [
   // Current month
   { id: 't-001', type: 'income', category: 'Salary', amount: 85000, description: 'Monthly salary - November', date: d(2), account: 'HDFC Bank' },
@@ -112,6 +123,22 @@ export const demoTransactions = [
   { id: 't-060', type: 'expense', category: 'Bills & Utilities', amount: 4200, description: 'AC electricity spike', date: dm(5, 25), account: 'HDFC Bank' },
 ];
 
+// ── Admin Specific Transactions (Enterprise / Organization scale) ──
+export const adminTransactions = [
+  { id: 'adm-1', type: 'income', category: 'Investments', amount: 450000, description: 'Enterprise SaaS Annual Contract', date: d(1), account: 'Corporate ICICI' },
+  { id: 'adm-2', type: 'income', category: 'Salary', amount: 250000, description: 'Director Executive Compensation', date: d(2), account: 'Corporate HDFC' },
+  { id: 'adm-3', type: 'income', category: 'Freelance', amount: 120000, description: 'System Architecture Consulting', date: d(3), account: 'Stripe' },
+  { id: 'adm-4', type: 'expense', category: 'Bills & Utilities', amount: 45000, description: 'AWS & Supabase Cloud Cluster', date: d(4), account: 'Corporate Amex' },
+  { id: 'adm-5', type: 'expense', category: 'Rent', amount: 85000, description: 'Tech Park Office Lease', date: d(5), account: 'Corporate HDFC' },
+  { id: 'adm-6', type: 'expense', category: 'Education', amount: 35000, description: 'Engineering Team Certifications', date: d(6), account: 'Corporate ICICI' },
+  { id: 'adm-7', type: 'expense', category: 'Travel', amount: 65000, description: 'Client Summit Bangalore Flight & Hotel', date: d(8), account: 'Corporate Amex' },
+  { id: 'adm-8', type: 'expense', category: 'Subscriptions', amount: 28000, description: 'GitHub Enterprise & Figma Org', date: d(10), account: 'Corporate Amex' },
+  { id: 'adm-9', type: 'expense', category: 'Food & Dining', amount: 18000, description: 'Quarterly Team Dinner', date: d(12), account: 'Corporate HDFC' },
+  { id: 'adm-10', type: 'income', category: 'Investments', amount: 180000, description: 'Angel Syndicate Distribution', date: dm(1, 15), account: 'Zerodha' },
+  { id: 'adm-11', type: 'expense', category: 'Bills & Utilities', amount: 42000, description: 'Cloud Infrastructure & CDN', date: dm(1, 20), account: 'Corporate Amex' },
+  { id: 'adm-12', type: 'income', category: 'Investments', amount: 420000, description: 'Enterprise Retainer Q3', date: dm(2, 5), account: 'Corporate ICICI' },
+];
+
 // ── Budgets (current month) ──
 export const demoBudgets = [
   { id: 'b-1', category: 'Food & Dining', limit: 8000, period: 'monthly', color: '#f59e0b' },
@@ -126,6 +153,15 @@ export const demoBudgets = [
   { id: 'b-10', category: 'Travel', limit: 15000, period: 'monthly', color: '#14b8a6' },
 ];
 
+// ── Admin Budgets ──
+export const adminBudgets = [
+  { id: 'ab-1', category: 'Bills & Utilities', limit: 60000, period: 'monthly', color: '#ef4444' },
+  { id: 'ab-2', category: 'Rent', limit: 100000, period: 'monthly', color: '#f97316' },
+  { id: 'ab-3', category: 'Subscriptions', limit: 40000, period: 'monthly', color: '#a855f7' },
+  { id: 'ab-4', category: 'Travel', limit: 80000, period: 'monthly', color: '#14b8a6' },
+  { id: 'ab-5', category: 'Education', limit: 50000, period: 'monthly', color: '#3b82f6' },
+];
+
 // ── Savings Goals ──
 export const demoSavingsGoals = [
   { id: 'sg-1', name: 'Emergency Fund', target: 300000, saved: 185000, icon: 'Shield', color: '#10b981', deadline: '2027-06-30' },
@@ -133,6 +169,13 @@ export const demoSavingsGoals = [
   { id: 'sg-3', name: 'Europe Trip', target: 500000, saved: 125000, icon: 'Plane', color: '#06b6d4', deadline: '2027-12-01' },
   { id: 'sg-4', name: 'New Bike', target: 150000, saved: 150000, icon: 'Bike', color: '#f59e0b', deadline: '2026-12-31' },
   { id: 'sg-5', name: 'Investment Portfolio', target: 1000000, saved: 340000, icon: 'TrendingUp', color: '#ec4899', deadline: '2028-01-01' },
+];
+
+// ── Admin Goals ──
+export const adminSavingsGoals = [
+  { id: 'asg-1', name: 'Corporate Reserve', target: 2500000, saved: 1750000, icon: 'Shield', color: '#10b981', deadline: '2027-12-31' },
+  { id: 'asg-2', name: 'Server Hardware Refresh', target: 800000, saved: 520000, icon: 'Laptop', color: '#8b5cf6', deadline: '2027-06-30' },
+  { id: 'asg-3', name: 'Expansion Fund', target: 5000000, saved: 2100000, icon: 'TrendingUp', color: '#06b6d4', deadline: '2028-12-31' },
 ];
 
 // ── Notifications ──
