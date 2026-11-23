@@ -29,7 +29,7 @@ export default function AddTransaction() {
   // Available categories based on chosen type
   const availableCategories = demoCategories.filter((c) => c.type === type);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
 
@@ -46,27 +46,31 @@ export default function AddTransaction() {
       return;
     }
 
-    // Add transaction
-    const newTxn = addTransaction({
-      type,
-      amount: Number(amount),
-      category,
-      description,
-      date,
-      account,
-    });
+    try {
+      // Add transaction
+      await addTransaction({
+        type,
+        amount: Number(amount),
+        category,
+        description,
+        date,
+        account,
+      });
 
-    // Fire budget / transaction notification
-    addNotification({
-      type: type === 'income' ? 'success' : 'info',
-      title: type === 'income' ? 'Income Logged' : 'Expense Logged',
-      message: `${description} for ₹${Number(amount).toLocaleString('en-IN')} was added.`,
-    });
+      // Fire budget / transaction notification
+      addNotification({
+        type: type === 'income' ? 'success' : 'info',
+        title: type === 'income' ? 'Income Logged' : 'Expense Logged',
+        message: `${description} for ₹${Number(amount).toLocaleString('en-IN')} was added.`,
+      });
 
-    setSuccess(true);
-    setTimeout(() => {
-      navigate('/transactions');
-    }, 1000);
+      setSuccess(true);
+      setTimeout(() => {
+        navigate('/');
+      }, 700);
+    } catch (err) {
+      setError(err.message || 'Failed to add transaction');
+    }
   };
 
   return (

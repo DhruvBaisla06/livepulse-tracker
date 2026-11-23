@@ -1,9 +1,24 @@
 import { motion } from 'framer-motion';
-import { ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { ArrowUpRight, ArrowDownRight, PlusCircle } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { formatCurrency, formatDate, timeAgo } from '../../utils/formatters';
 
 export default function RecentTransactions({ transactions }) {
-  const recent = transactions.slice(0, 8);
+  const recent = (transactions || []).slice(0, 8);
+
+  if (recent.length === 0) {
+    return (
+      <div className="py-8 text-center flex flex-col items-center justify-center">
+        <p className="text-sm text-white/40 mb-3">No transactions recorded yet</p>
+        <Link
+          to="/add-transaction"
+          className="inline-flex items-center gap-1.5 text-xs font-medium text-purple-400 hover:text-purple-300 glass px-3 py-1.5 rounded-lg transition-colors"
+        >
+          <PlusCircle size={14} /> Add your first transaction
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-2">
