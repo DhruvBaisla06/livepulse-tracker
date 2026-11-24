@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LivePulse - Project Report & Presentation Dossier</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    @page {
+      size: A4;
+      margin: 18mm 14mm 18mm 14mm;
+      @bottom-right {
+        content: counter(page);
+        font-size: 9pt;
+        color: #888;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      color: #1e293b;
+      background: #ffffff;
+      line-height: 1.6;
+      font-size: 10pt;
+      margin: 0;
+      padding: 0;
+    }
+
+    .cover-page {
+      page-break-after: always;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 90vh;
+      padding: 40px 20px;
+      border-left: 6px solid #8b5cf6;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.04) 0%, rgba(6, 182, 212, 0.04) 100%);
+      border-radius: 0 16px 16px 0;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 4px 12px;
+      background: #f1f5f9;
+      color: #6366f1;
+      border-radius: 9999px;
+      font-size: 8.5pt;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      border: 1px solid #e2e8f0;
+      width: fit-content;
+    }
+
+    .badge-live {
+      background: #ecfdf5;
+      color: #059669;
+      border-color: #a7f3d0;
+    }
+
+    h1.project-title {
+      font-size: 32pt;
+      font-weight: 800;
+      color: #0f172a;
+      margin: 0 0 8px 0;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+
+    .tagline {
+      font-size: 14pt;
+      color: #64748b;
+      margin: 0 0 30px 0;
+      font-weight: 400;
+    }
+
+    .meta-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      margin-top: 40px;
+      padding-top: 30px;
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .meta-item {
+      font-size: 9.5pt;
+    }
+
+    .meta-label {
+      color: #94a3b8;
+      font-size: 8pt;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+      font-weight: 600;
+    }
+
+    .meta-value {
+      color: #1e293b;
+      font-weight: 600;
+    }
+
+    .meta-value a {
+      color: #7c3aed;
+      text-decoration: none;
+    }
+
+    /* Section Styling */
+    h2 {
+      font-size: 15pt;
+      font-weight: 700;
+      color: #0f172a;
+      border-bottom: 2px solid #8b5cf6;
+      padding-bottom: 6px;
+      margin-top: 28px;
+      margin-bottom: 14px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 11.5pt;
+      font-weight: 600;
+      color: #334155;
+      margin-top: 18px;
+      margin-bottom: 8px;
+      page-break-after: avoid;
+    }
+
+    p, li {
+      color: #334155;
+      font-size: 9.5pt;
+    }
+
+    ul, ol {
+      margin-top: 6px;
+      margin-bottom: 12px;
+      padding-left: 20px;
+    }
+
+    li {
+      margin-bottom: 4px;
+    }
+
+    /* Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 8.5pt;
+      page-break-inside: avoid;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #475569;
+      font-weight: 600;
+      text-align: left;
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+      text-transform: uppercase;
+      font-size: 7.5pt;
+      letter-spacing: 0.05em;
+    }
+
+    td {
+      padding: 7px 10px;
+      border: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    tr:nth-child(even) {
+      background: #f8fafc;
+    }
+
+    /* Code Blocks */
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8pt;
+      overflow-x: auto;
+      line-height: 1.45;
+      margin: 12px 0;
+      page-break-inside: avoid;
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8.5pt;
+      background: #f1f5f9;
+      color: #7c3aed;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre code {
+      background: transparent;
+      color: inherit;
+      padding: 0;
+    }
+
+    /* Callout Card */
+    .callout {
+      background: #f8fafc;
+      border-left: 4px solid #8b5cf6;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 0;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+
+    .callout-title {
+      font-weight: 700;
+      color: #0f172a;
+      font-size: 9.5pt;
+      margin-bottom: 4px;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin: 14px 0;
+      page-break-inside: avoid;
+    }
+
+    .card {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      background: #ffffff;
+    }
+    
+    .card-title {
+      font-weight: 600;
+      color: #0f172a;
+      font-size: 9pt;
+      margin-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= COVER PAGE ================= -->
+  <div class="cover-page">
+    <div class="badge badge-live">● Production Release v1.0.0</div>
+    <h1 class="project-title">LivePulse</h1>
+    <p class="tagline">Real-Time Personal Finance & Expense Analytics Platform</p>
+
+    <div class="callout" style="border-color: #06b6d4; background: rgba(6, 182, 212, 0.05);">
+      <div class="callout-title" style="color: #0891b2;">Executive Presentation Dossier</div>
+      <p style="margin: 0; font-size: 9pt; color: #475569;">
+        A comprehensive project analysis detailing software architecture, full-stack technologies, relational database schemas, Row Level Security (RLS) enforcement, Glassmorphism UI design, and interactive data visualization engines.
+      </p>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-item">
+        <div class="meta-label">Presenter / Developer</div>
+        <div class="meta-value">Dhruv Baisla</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Domain & Framework</div>
+        <div class="meta-value">Fintech SaaS · React 19 + Supabase</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Live Application URL</div>
+        <div class="meta-value"><a href="https://livepulse-tracker.vercel.app">https://livepulse-tracker.vercel.app</a></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">GitHub Source Repository</div>
+        <div class="meta-value"><a href="https://github.com/DhruvBaisla06/livepulse-tracker">DhruvBaisla06/livepulse-tracker</a></div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Hosting & CDN</div>
+        <div class="meta-value">Vercel Global Edge Network</div>
+      </div>
+      <div class="meta-item">
+        <div class="meta-label">Document Date</div>
+        <div class="meta-value">November 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= SECTION 1: EXECUTIVE SUMMARY ================= -->
+  <h2>1. Executive Summary & Abstract</h2>
+  <p>
+    <strong>LivePulse</strong> is an enterprise-grade, multi-tenant personal finance and expense analytics web application. Designed to bridge the divide between static spreadsheet software and disconnected expense trackers, LivePulse delivers an ultra-fast, visually engaging, and secure financial management experience.
+  </p>
+  <p>
+    Powered by <strong>React 19</strong>, <strong>Tailwind CSS v4</strong>, <strong>Supabase (PostgreSQL 15+)</strong>, and <strong>Recharts 3</strong>, LivePulse provides bi-directional real-time ledger updates via WebSocket subscriptions without requiring manual page reloads. The platform features dynamic category budget caps with automated threshold defense, savings milestone planning, interactive multi-chart visualizations, and client-side audited Excel and CSV export engines.
+  </p>
+
+  <!-- ================= SECTION 2: PROBLEM STATEMENT ================= -->
+  <h2>2. Problem Statement & Motivation</h2>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title">❌ Traditional Spreadsheets (Excel / Sheets)</div>
+      <p style="font-size: 8.5pt; margin: 0; color: #64748b;">
+        Steep learning curves, manual data entry, no automated mobile access, no threshold warnings before budgets are exceeded, and high risk of formula corruptions.
+      </p>
+    </div>
+    <div class="card">
+      <div class="card-title">❌ Conventional Web Trackers</div>
+      <p style="font-size: 8.5pt; margin: 0; color: #64748b;">
+        Require manual browser refreshes to recalculate balances, possess dull corporate interfaces, lack export capabilities, and have poor data isolation.
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= SECTION 3: SYSTEM ARCHITECTURE ================= -->
+  <h2>3. System Architecture & Tech Stack</h2>
+  <p>
+    The platform employs a decoupled Single Page Application (SPA) architecture deployed on the Vercel Edge Network, communicating over TLS 1.3 / WebSocket channels with Supabase Managed PostgreSQL.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>Version</th>
+        <th>Function & Architectural Role</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Frontend Core</strong></td>
+        <td>React.js</td>
+        <td>19.3.1</td>
+        <td>Component-based UI, reactive hooks (useContext, useMemo, useCallback).</td>
+      </tr>
+      <tr>
+        <td><strong>Bundler / Server</strong></td>
+        <td>Vite</td>
+        <td>8.3.8</td>
+        <td>Next-gen build tool with Hot Module Replacement (HMR &lt; 50ms).</td>
+      </tr>
+      <tr>
+        <td><strong>Client Routing</strong></td>
+        <td>React Router DOM</td>
+        <td>6.30.6</td>
+        <td>Client-side SPA navigation, route guards, and deep-link routing.</td>
+      </tr>
+      <tr>
+        <td><strong>Styling Engine</strong></td>
+        <td>Tailwind CSS</td>
+        <td>4.3.5</td>
+        <td>Utility-first CSS engine with custom glassmorphism token system.</td>
+      </tr>
+      <tr>
+        <td><strong>Cloud Database</strong></td>
+        <td>Supabase PostgreSQL</td>
+        <td>15+</td>
+        <td>Relational database with Row Level Security (RLS) policies.</td>
+      </tr>
+      <tr>
+        <td><strong>Realtime Engine</strong></td>
+        <td>Supabase Realtime</td>
+        <td>v2 Client</td>
+        <td>WebSocket postgres_changes replication for live multi-tab updates.</td>
+      </tr>
+      <tr>
+        <td><strong>Data Visualization</strong></td>
+        <td>Recharts</td>
+        <td>3.11.0</td>
+        <td>Responsive SVG Area, Bar, Donut, and Daily Intensity charts.</td>
+      </tr>
+      <tr>
+        <td><strong>Motion & UX</strong></td>
+        <td>Framer Motion</td>
+        <td>14.14.0</td>
+        <td>Fluid physics-based layout transitions, modal reveals, and button taps.</td>
+      </tr>
+      <tr>
+        <td><strong>Iconography</strong></td>
+        <td>Lucide React</td>
+        <td>1.75.0</td>
+        <td>Modern, lightweight vector iconography suite (40+ glyphs).</td>
+      </tr>
+      <tr>
+        <td><strong>Export Utilities</strong></td>
+        <td>SheetJS + PapaParse</td>
+        <td>0.18 / 5.7</td>
+        <td>In-browser generation of native Microsoft Excel (.xlsx) and RFC CSV files.</td>
+      </tr>
+      <tr>
+        <td><strong>Deployment & CI/CD</strong></td>
+        <td>Vercel Edge Network</td>
+        <td>Cloud</td>
+        <td>Automated Git webhook builds, edge asset distribution, SPA rewrites.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ================= SECTION 4: KEY FUNCTIONAL MODULES ================= -->
+  <div class="page-break"></div>
+  <h2>4. Key Functional Modules</h2>
+
+  <h3>4.1 Multi-Persona Authentication System</h3>
+  <ul>
+    <li><strong>Private Registered Account:</strong> Direct Supabase JWT authentication. Each user receives an isolated tenant schema with zero data crossover.</li>
+    <li><strong>Demo Persona (<code>demo@livepulse.app</code>):</strong> Pre-loaded with 60 realistic transactions across 6 historical months (Arjun Mehta) for instant evaluation.</li>
+    <li><strong>System Admin Persona (<code>admin@livepulse.app</code>):</strong> Populated with enterprise-scale corporate transactions (SaaS retainers, cloud infrastructure clusters, leases).</li>
+  </ul>
+
+  <h3>4.2 Real-Time Executive Dashboard</h3>
+  <ul>
+    <li><strong>KPI Stat Cards:</strong> Real-time calculations for Total Income, Total Expenses, Net Savings, and Budget Remaining with trend indicators.</li>
+    <li><strong>Interactive Chart Suite:</strong> 6-month historical Area trend curves, side-by-side comparative Bar charts, and Category donut breakdown.</li>
+    <li><strong>Recent Activity Feed:</strong> Latest 8 transactions with category tags, relative timestamps, and color-coded values.</li>
+  </ul>
+
+  <h3>4.3 Full CRUD Transaction Ledger</h3>
+  <ul>
+    <li>Live filtering by transaction type (All / Income / Expense), category taxonomy, and search text.</li>
+    <li>In-place modal editing with reactive recalculation across the entire application.</li>
+    <li>Double-confirmation delete safety modal to prevent accidental financial ledger destruction.</li>
+  </ul>
+
+  <h3>4.4 Category Budgeting & Threshold Defense Guard</h3>
+  <ul>
+    <li>Category-specific monthly expenditure caps.</li>
+    <li>Dynamic automated status badges:
+      <ul>
+        <li><strong>Healthy (Green):</strong> Spending &lt; 80% of category limit.</li>
+        <li><strong>Warning (Amber):</strong> Spending between 80% and 100% of category limit.</li>
+        <li><strong>Exceeded (Red):</strong> Spending &gt; 100% of allocated limit.</li>
+      </ul>
+    </li>
+  </ul>
+
+  <h3>4.5 Savings Goals Milestone Engine</h3>
+  <ul>
+    <li>Target milestone cards with target amounts, saved balances, and target deadlines.</li>
+    <li>Dedicated <em>"Add Money"</em> modal enabling instant micro-contributions that dynamically advance progress meters.</li>
+  </ul>
+
+  <h3>4.6 Audited Financial Statements & Reports</h3>
+  <ul>
+    <li>Monthly and annual statement summaries with cash retention percentages.</li>
+    <li>One-click export to native Microsoft Excel (<code>.xlsx</code>) via SheetJS.</li>
+    <li>One-click export to CSV (<code>.csv</code>) via PapaParse.</li>
+    <li>Print and PDF layout optimization.</li>
+  </ul>
+
+  <!-- ================= SECTION 5: DATABASE SCHEMA ================= -->
+  <h2>5. Database Schema & Data Models</h2>
+  <p>
+    LivePulse utilizes 6 primary relational tables structured under PostgreSQL with strict foreign keys, check constraints, and performance indexes:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Table Name</th>
+        <th>Primary Key</th>
+        <th>Foreign Keys</th>
+        <th>Purpose & Stored Attributes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>profiles</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>auth.users(id)</code></td>
+        <td>User identity, full name, email, avatar URL, currency (INR), date format preferences.</td>
+      </tr>
+      <tr>
+        <td><code>categories</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>user_id -&gt; auth.users</code></td>
+        <td>Custom categories, transaction type ('income'|'expense'), icon, color accent.</td>
+      </tr>
+      <tr>
+        <td><code>transactions</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>user_id -&gt; auth.users</code></td>
+        <td>Financial records: type, category, amount, description, date, payment account.</td>
+      </tr>
+      <tr>
+        <td><code>budgets</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>user_id -&gt; auth.users</code></td>
+        <td>Monthly budget caps per category, spending limits, period definitions.</td>
+      </tr>
+      <tr>
+        <td><code>savings_goals</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>user_id -&gt; auth.users</code></td>
+        <td>Target goals, target amount, current saved amount, icon, deadline date.</td>
+      </tr>
+      <tr>
+        <td><code>notifications</code></td>
+        <td><code>id UUID</code></td>
+        <td><code>user_id -&gt; auth.users</code></td>
+        <td>Real-time alert logs: type ('info'|'warning'|'success'|'error'), title, message, read flag.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ================= SECTION 6: SECURITY & RLS ================= -->
+  <div class="page-break"></div>
+  <h2>6. Security & Data Protection Framework</h2>
+
+  <div class="callout">
+    <div class="callout-title">🔒 PostgreSQL Row Level Security (RLS) Implementation</div>
+    <p style="margin: 0; font-size: 8.5pt;">
+      Security is enforced directly at the database engine level. Every table enables RLS policies requiring that queries match the cryptographically verified JWT identity:
+    </p>
+  </div>
+
+  <pre><code>ALTER TABLE transactions ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Users can CRUD own transactions" ON transactions
+  FOR ALL USING (auth.uid() = user_id)
+  WITH CHECK (auth.uid() = user_id);</code></pre>
+
+  <p>
+    <strong>Key Security Highlights:</strong>
+  </p>
+  <ul>
+    <li><strong>Kernel-Level Isolation:</strong> Even if a malicious request attempts to query another tenant's records, PostgreSQL drops the query at the kernel level with zero rows returned.</li>
+    <li><strong>Zero Secret Key Leakage:</strong> Only the public <code>VITE_SUPABASE_ANON_KEY</code> is embedded in frontend assets. The master <code>service_role</code> key is never exposed.</li>
+    <li><strong>Channel Authorization:</strong> Realtime WebSocket channels are filtered explicitly by <code>user_id=eq.${user.id}</code>.</li>
+  </ul>
+
+  <!-- ================= SECTION 7: UI/UX GLASSMORPHISM ================= -->
+  <h2>7. UI/UX Design System (Glassmorphism)</h2>
+  <p>
+    LivePulse departs from flat corporate dashboards by establishing a custom luxury Glassmorphism visual language:
+  </p>
+  <ul>
+    <li><strong>Cosmic Obsidian Background:</strong> Multi-stop gradients spanning from deep obsidian (<code>#050510</code>) through midnight purple (<code>#161640</code>).</li>
+    <li><strong>Translucent Frosted Glass:</strong> High-performance hardware-accelerated <code>backdrop-filter: blur(20px)</code> surfaces with subtle 1px borders at 10% opacity.</li>
+    <li><strong>Active Glow Accents:</strong> Neon Cyan (<code>#06b6d4</code>) for system actions and inflow stats; Electric Purple (<code>#8b5cf6</code>) for brand highlights and savings goals.</li>
+    <li><strong>Responsive Navigation Drawer:</strong> Seamlessly transitions from an executive desktop sidebar to an animated slide-out drawer on tablet and mobile viewports.</li>
+  </ul>
+
+  <!-- ================= SECTION 8: PRESENTATION Q&A ================= -->
+  <h2>8. Presentation Talking Points & Q&A Defense</h2>
+
+  <div class="callout" style="border-color: #10b981;">
+    <div class="callout-title" style="color: #059669;">Q1: How does LivePulse recalculate dashboard totals without page reloads?</div>
+    <p style="margin: 0; font-size: 8.5pt; color: #475569;">
+      <strong>Answer:</strong> Through a global React Context (<code>TransactionProvider</code>) coupled with Supabase Realtime WebSocket subscriptions. When a transaction is committed, the optimistic state updates immediately in memory, and the WebSocket payload synchronizes all open browser tabs and devices in real time.
+    </p>
+  </div>
+
+  <div class="callout" style="border-color: #3b82f6;">
+    <div class="callout-title" style="color: #2563eb;">Q2: What prevents unauthorized access between different users?</div>
+    <p style="margin: 0; font-size: 8.5pt; color: #475569;">
+      <strong>Answer:</strong> PostgreSQL Row Level Security (RLS) policies. Rather than relying solely on frontend checks, the database engine verifies that the authenticated user's token UUID matches the row's <code>user_id</code> before executing any SELECT, INSERT, UPDATE, or DELETE operation.
+    </p>
+  </div>
+
+  <div class="callout" style="border-color: #f59e0b;">
+    <div class="callout-title" style="color: #d97706;">Q3: Why was Recharts selected over Chart.js or Canvas?</div>
+    <p style="margin: 0; font-size: 8.5pt; color: #475569;">
+      <strong>Answer:</strong> Recharts is built natively with React components and SVG. It provides declarative JSX syntax, effortless responsive scaling via <code>&lt;ResponsiveContainer&gt;</code>, and avoids Canvas pixelation on high-DPI screens.
+    </p>
+  </div>
+
+  <div style="margin-top: 40px; padding-top: 16px; border-top: 1px solid #e2e8f0; text-align: center; font-size: 8.5pt; color: #94a3b8;">
+    <strong>LivePulse Platform — Engineered & Presented by Dhruv Baisla</strong> · All Rights Reserved © 2026
+  </div>
+
+</body>
+</html>
